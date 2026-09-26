@@ -18,6 +18,23 @@ from app.schemas.conversation import (
     ConversationCreate,
     ConversationResponse,
 )
+from app.schemas.survey import (
+    QuestionCreate,
+    QuestionResponseSchema,
+    SurveyCreate,
+    SurveyResponseSchema,
+    SurveyResponseItem,
+    SurveyRunResponse,
+    QuestionGroupedResponses,
+    SurveyResponsesGrouped,
+)
+from app.schemas.insight import (
+    InsightReportResponse,
+)
+from app.schemas.usage_score import (
+    UsageScoreRequest,
+    UsageScoreResponse,
+)
 
 __all__ = [
     "ExperimentCreate",
@@ -32,4 +49,15 @@ __all__ = [
     "PersonaFullMemoryResponse",
     "ConversationCreate",
     "ConversationResponse",
+    "QuestionCreate",
+    "QuestionResponseSchema",
+    "SurveyCreate",
+    "SurveyResponseSchema",
+    "SurveyResponseItem",
+    "SurveyRunResponse",
+    "QuestionGroupedResponses",
+    "SurveyResponsesGrouped",
+    "InsightReportResponse",
+    "UsageScoreRequest",
+    "UsageScoreResponse",
 ]

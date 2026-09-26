@@ -90,3 +90,95 @@ Return ONLY a JSON array of objects with the schema:
 ]
 If no clear new opinion or memory was expressed, return an empty list `[]`.
 """
+
+SURVEY_QUESTION_ANSWER_PROMPT = """You are roleplaying as persona "{name}" ({occupation}, Age: {age}) responding to a survey question.
+
+PERSONA PROFILE:
+- Demographics: {demographics}
+- Personality Traits: {personality_traits}
+- Behavioral Patterns: {behavioral_patterns}
+- Decision Style: {decision_style}
+- Established Memories/Opinions: {memories_and_opinions}
+
+SURVEY QUESTION:
+Text: "{question_text}"
+Type: "{question_type}"
+Options/Scale: {options}
+
+INSTRUCTIONS:
+Respond authentically as {name} according to your profile, budget constraints, and decision style.
+
+Return ONLY a valid JSON object matching the format:
+{{
+  "answer": "Clear direct response text",
+  "rating_score": 4.0,  // Include number (1-5 or 1-10) ONLY if question_type is 'rating' or numerical rating, else null
+  "reasoning": "Brief explanation of why you gave this answer based on your persona background"
+}}
+"""
+
+INSIGHT_EXTRACTION_PROMPT = """You are an expert AI user research analyst. Analyze the following collection of survey responses and interview transcripts gathered for the product: "{product_name}" ({product_description}).
+
+COLLECTED SURVEY RESPONSES & INTERVIEWS:
+{collected_data_text}
+
+INSTRUCTIONS:
+Synthesize the data and return ONLY a valid JSON object matching this exact structure:
+{{
+  "recurring_themes": [
+    {{
+      "theme": "Theme Title",
+      "description": "Detailed explanation of theme",
+      "supporting_quotes": ["Quote 1", "Quote 2"]
+    }}
+  ],
+  "sentiment_distribution": {{
+    "positive_percentage": 40.0,
+    "neutral_percentage": 20.0,
+    "negative_percentage": 40.0,
+    "counts": {{"positive": 2, "neutral": 1, "negative": 2}}
+  }},
+  "agreement_patterns": [
+    "Key area of common consensus among personas"
+  ],
+  "disagreements": [
+    "Key areas where budget or demographic segments disagreed"
+  ],
+  "behavioral_trends": [
+    "Observed behavior pattern across personas"
+  ],
+  "supporting_references": [
+    {{
+      "reference_id": "resp_001 or conv_001",
+      "source_type": "survey",
+      "persona_id": "persona_123",
+      "persona_name": "Rahul Sharma",
+      "content_snippet": "Relevant response text snippet"
+    }}
+  ],
+  "limitations": "These findings are derived from AI synthetic persona simulations and serve as hypotheses for product direction, not real-world statistical evidence."
+}}
+"""
+
+USAGE_SCORE_PROMPT = """You are evaluating product usage likelihood for persona "{name}" ({occupation}, Age: {age}).
+
+PRODUCT: "{product_name}" - {product_description}
+
+PERSONA PROFILE & TRAITS:
+- Personality: {personality_traits}
+- Decision Style: {decision_style}
+- Behavioral Patterns: {behavioral_patterns}
+- Preferences: {preferences}
+- Memories & Opinions: {memories_and_opinions}
+
+QUESTION: "{question}"
+
+INSTRUCTIONS:
+Evaluate how likely {name} is to regularly use this product.
+Return ONLY a valid JSON object with format:
+{{
+  "would_use": true, // boolean
+  "score": 8.0, // float 1.0 to 10.0 scale
+  "category": "Would Use", // 'Would Use', 'Maybe', or 'Unlikely'
+  "reasoning": "Detailed explanation of why this persona would or would not adopt this product"
+}}
+"""

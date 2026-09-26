@@ -8,7 +8,14 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import settings
 from app.database.database import engine, Base
-from app.api.routes import experiments_router, personas_router, conversations_router
+from app.api.routes import (
+    experiments_router,
+    personas_router,
+    conversations_router,
+    surveys_router,
+    insights_router,
+    analytics_router
+)
 
 # Setup logging
 logging.basicConfig(
@@ -28,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.APP_NAME,
     description="Generative AI Powered Synthetic User Generation Platform - Backend API",
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan
@@ -101,3 +108,6 @@ def root():
 app.include_router(experiments_router)
 app.include_router(personas_router)
 app.include_router(conversations_router)
+app.include_router(surveys_router)
+app.include_router(insights_router)
+app.include_router(analytics_router)
