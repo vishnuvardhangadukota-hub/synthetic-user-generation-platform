@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -6,8 +6,15 @@ from app.database.database import get_db
 from app.schemas.usage_score import UsageScoreRequest, UsageScoreResponse
 from app.services.usage_score_service import UsageScoreService
 from app.services.experiment_service import ExperimentService
+from app.models.experiment import Experiment
+from app.models.persona import Persona
+from app.models.usage_score import UsageScoreReport
+from app.models.insight import InsightReport
 
 router = APIRouter(prefix="/api/experiments", tags=["Product Usage Scoring"])
+
+# Separate router for the /api/analytics prefix
+analytics_overview_router = APIRouter(prefix="/api/analytics", tags=["Analytics Overview"])
 
 @router.post("/{experiment_id}/usage-score", response_model=UsageScoreResponse, status_code=status.HTTP_201_CREATED)
 async def calculate_usage_score(
