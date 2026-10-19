@@ -34,3 +34,41 @@ def test_usage_score_calculation_and_segmentation(client):
     get_res = client.get(f"/api/experiments/{exp_id}/usage-score")
     assert get_res.status_code == 200
     assert get_res.json()["id"] == data["id"]
+
+
+def test_analytics_overview_endpoint(client):
+    """Analytics overview returns platform-wide aggregated metrics."""
+    # 1. Before creating data, endpoint returns 200 with initial counters
+    res = client.get("/api/analytics/overview")
+    assert res.status_code == 200
+    data = res.json()
+    assert "total_experiments" in data
+    assert "total_personas" in data
+    assert "total_surveys" in data
+    assert "total_responses" in data
+    assert "total_insights" in data
+    assert "total_usage_scores" in data
+    assert data["total_experiments"] == 0
+    assert data["total_personas"] == 0
+
+    # 2. Create an experiment & generate personas
+    exp_res = client.post("/api/experiments", json={
+        "name": "Analytics Test Exp",
+        "product_name": "TestProduct",
+        "product_description": "Testing product analytics overview",
+        "target_audience": "Researchers",
+        "research_objectives": ["Evaluate metrics"],
+        "number_of_personas": 2
+    })
+    assert exp_res.status_code == 201
+    exp_id = exp_res.json()["id"]
+
+    client.post(f"/api/experiments/{exp_id}/personas/generate", json={"number_of_personas": 2})
+
+    # 3. Verify counts reflect in analytics overview
+    res_after = client.get("/api/analytics/overview")
+    assert res_after.status_code == 200
+    data_after = res_after.json()
+    assert data_after["total_experiments"] == 1
+    assert data_after["total_personas"] == 2
+

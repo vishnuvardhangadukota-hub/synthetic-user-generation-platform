@@ -15,6 +15,7 @@ from app.api.routes import (
     surveys_router,
     insights_router,
     analytics_router,
+    analytics_overview_router,
     dashboard_router
 )
 
@@ -112,4 +113,5 @@ app.include_router(conversations_router)
 app.include_router(surveys_router)
 app.include_router(insights_router)
 app.include_router(analytics_router)
+app.include_router(analytics_overview_router)
 app.include_router(dashboard_router)
