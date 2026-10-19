@@ -14,7 +14,8 @@ from app.api.routes import (
     conversations_router,
     surveys_router,
     insights_router,
-    analytics_router
+    analytics_router,
+    dashboard_router
 )
 
 # Setup logging
@@ -111,3 +112,4 @@ app.include_router(conversations_router)
 app.include_router(surveys_router)
 app.include_router(insights_router)
 app.include_router(analytics_router)
+app.include_router(dashboard_router)
